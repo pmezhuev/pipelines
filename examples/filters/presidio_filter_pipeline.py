@@ -70,11 +70,11 @@ class Pipeline:
         print(f"pipe:{__name__}")
         print(user)
 
-        if body.get("model").startswith("FILTER"):
-            messages = body.get("messages", [])
-            for message in messages:
-                print(message)
-                if message.get("role") == "user":
-                    message["content"] = self.redact_pii(message["content"])
+        filter = body.get("model").startswith("FILTER")
+        messages = body.get("messages", [])
+        for message in messages:
+            print(message)
+            if filter and message.get("role") == "user":
+                message["content"] = self.redact_pii(message["content"])
 
         return body
