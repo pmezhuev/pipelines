@@ -69,12 +69,12 @@ class Pipeline:
 
     async def inlet(self, body: dict, user: Optional[dict] = None) -> dict:
         print(f"pipe:{__name__}")
+        print(json.dumps(user, ensure_ascii=False))
+        print(json.dumps(message, ensure_ascii=False))
 
         if body.get("model").startswith("FILTER"):
-            print(json.dumps(user))
             messages = body.get("messages", [])
             for message in messages:
-                print(json.dumps(message))
                 if message.get("role") == "user":
                     message["content"] = self.redact_pii(message["content"])
 
