@@ -35,7 +35,6 @@ class Pipeline:
         self.valves = self.Valves(
             **{
                 "pipelines": os.getenv("PII_REDACT_PIPELINES", "*").split(","),
-                "enabled_for_admins": os.getenv("PII_REDACT_ENABLED_FOR_ADMINS", "false").lower() == "true",
                 "entities_to_redact": os.getenv("PII_REDACT_ENTITIES", ",".join(self.Valves().entities_to_redact)).split(","),
                 "language": os.getenv("PII_REDACT_LANGUAGE", "en"),
             }
@@ -72,7 +71,7 @@ class Pipeline:
         print(body)
         print(user)
 
-        if user is None or user.get("role") != "admin" or self.valves.enabled_for_admins:
+        if body.get("model").startswith("FILTER"):
             messages = body.get("messages", [])
             for message in messages:
                 if message.get("role") == "user":
