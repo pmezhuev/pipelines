@@ -8,7 +8,6 @@ description: A pipeline for redacting personally identifiable information (PII) 
 requirements: presidio-analyzer, presidio-anonymizer
 """
 
-import json
 import os
 from typing import List, Optional
 from pydantic import BaseModel
@@ -69,12 +68,12 @@ class Pipeline:
 
     async def inlet(self, body: dict, user: Optional[dict] = None) -> dict:
         print(f"pipe:{__name__}")
-        print(json.dumps(user, ensure_ascii=False))
-        print(json.dumps(message, ensure_ascii=False))
+        print(user)
 
         if body.get("model").startswith("FILTER"):
             messages = body.get("messages", [])
             for message in messages:
+                print(message)
                 if message.get("role") == "user":
                     message["content"] = self.redact_pii(message["content"])
 
